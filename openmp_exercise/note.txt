@@ -1,0 +1,6 @@
+openmp start: include <omp.h>
+              #pragma omp parallel
+              need the threads as a options
+
+
+timer:              
