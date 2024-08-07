@@ -16,8 +16,8 @@ void matrix_multi(int m, int n, int k, double *a, double *b, double *c){
   }
 
 void test_parallel_code(int m, int n, int k, double *a, double *b, double *c, int threads){
-     for(int i = 0; i < m; ++i){
-       #pragma omp parallel for num_threads(threads)	     
+  #pragma omp parallel for num_threads(threads) schedule(dynamic, 1024)
+  for(int i = 0; i < m; ++i){	  
        for(int j = 0; j < n; ++j){
           for(int l = 0; l < k; ++l){
               c[i * n + j]+= a[i * k + l] * b[l * n + j];

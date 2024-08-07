@@ -1,6 +1,14 @@
-openmp start: include <omp.h>
-              #pragma omp parallel
+openmp start: #include <omp.h>
+              #pragma omp parallel for num_threads(threads) schedule([static, dynamic], chuck_num)
               need the threads as a options
+              task file end -fopenmp
 
 
-timer:              
+timer: #include <sys/time.h>
+       struct timeval t0;
+       gettimeofday(&t0, NULL);
+       (function here)
+       gettimeofday(&t1, NULL);
+
+
+                    
