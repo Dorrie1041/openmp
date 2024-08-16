@@ -106,7 +106,7 @@ void SmithWaterman(int8_t *seq1,
     int32_t local_endPosition1 = 0;
     int32_t local_endPosition2 = 0;
          for (int32_t diag = 0; diag < rows_chunks + cols_chunks - 1; ++diag) {
-            #pragma omp parallel for num_threads(10) private(i, j) shared(M, E, F, seq1, seq2, maxScore, endPosition1, endPosition2)
+            #pragma omp parallel for num_threads(cols_chunks) private(i, j) shared(M, E, F, seq1, seq2, maxScore, endPosition1, endPosition2)
             for(int32_t a = std::max(0, diag - cols_chunks + 1); a <= std::min(diag, rows_chunks) ; ++a){
                 int32_t b = diag - a;
                 for (i = a * intervals; i <= std::min((a + 1) * intervals, length1); ++i) {
