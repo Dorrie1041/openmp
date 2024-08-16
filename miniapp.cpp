@@ -98,9 +98,11 @@ void SmithWaterman(int8_t *seq1,
     endPosition2 = 0;
     maxScore = 0;
 
-    int32_t intervals = 200;
-    int32_t rows_chunks = (length1 + intervals - 1) / intervals;
-    int32_t cols_chunks = (length2 + intervals - 1) / intervals;
+    int8_t num_chunks = 15;
+    int32_t row_intervals = length1/num_chunks;
+    int32_t col_intervals = length2/num_chunks;
+    int32_t rows_chunks = (length1 + row_intervals - 1) / row_intervals;
+    int32_t cols_chunks = (length2 + col_intervals - 1) / col_intervals;
 
     int32_t local_maxScore = 0;
     int32_t local_endPosition1 = 0;
@@ -109,8 +111,8 @@ void SmithWaterman(int8_t *seq1,
             #pragma omp parallel for num_threads(cols_chunks) private(i, j) shared(M, E, F, seq1, seq2, maxScore, endPosition1, endPosition2)
             for(int32_t a = std::max(0, diag - cols_chunks + 1); a <= std::min(diag, rows_chunks) ; ++a){
                 int32_t b = diag - a;
-                for (i = a * intervals; i <= std::min((a + 1) * intervals, length1); ++i) {
-                    for (j = b * intervals; j <= std::min((b + 1) * intervals, length2); ++j) {
+                for (i = a * row_intervals; i <= std::min((a + 1) * row_intervals, length1); ++i) {
+                    for (j = b * col_intervals; j <= std::min((b + 1) * col_intervals, length2); ++j) {
                         if (i == 0 || j == 0) continue; // Skip processing for i=0 or j=0
                         E[i][j] = (_open_gap_penalty + M[i][j - 1]) > (_extend_gap_penalty + E[i][j - 1])
                                   ? (_open_gap_penalty + M[i][j - 1])
